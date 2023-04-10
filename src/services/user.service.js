@@ -28,7 +28,6 @@ exports.createUserService = async (userData) => {
 
 		var userToSave = await user.save();
 		return { status: true, body: userToSave };
-		ß;
 	} catch (error) {
 		console.log(error);
 		return new ErrorHandler(500, error.message);
