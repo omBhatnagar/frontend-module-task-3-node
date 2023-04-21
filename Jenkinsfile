@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Tooling versions') {
             steps{
-               echo "Hello world"
+                sh 'docker --version'
             }
         }
     }
