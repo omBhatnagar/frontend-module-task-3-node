@@ -1,15 +1,9 @@
-const {
-	createUserService,
-	updateUserService,
-	loginUserService,
-	getUsersService,
-	deleteUserService,
-} = require("../services/user.service");
+const userService = require("../services/user.service");
 const { ErrorHandler } = require("../util/error");
 
 exports.createUser = async (req, res, next) => {
 	const { email, name, password, confirmPassword } = req.body;
-	const response = await createUserService({
+	const response = await userService.createUserService({
 		email,
 		name,
 		password,
@@ -27,7 +21,7 @@ exports.createUser = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
 	const { email, password } = req.body;
-	const response = await loginUserService({ email, password });
+	const response = await userService.loginUserService({ email, password });
 
 	if (response instanceof ErrorHandler) return next(response);
 
@@ -39,7 +33,7 @@ exports.login = async (req, res, next) => {
 };
 
 exports.getUsers = async (req, res, next) => {
-	const response = await getUsersService();
+	const response = await userService.getUsersService();
 	if (response instanceof ErrorHandler) return next(response);
 
 	return res.status(200).send({
@@ -52,7 +46,11 @@ exports.getUsers = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
 	const { name, password } = req.body;
 	const { email } = req.params;
-	const response = await updateUserService({ name, password, email });
+	const response = await userService.updateUserService({
+		name,
+		password,
+		email,
+	});
 
 	if (response instanceof ErrorHandler) return next(response);
 
@@ -65,7 +63,7 @@ exports.updateUser = async (req, res, next) => {
 
 exports.deleteUser = async (req, res, next) => {
 	const { id } = req.params;
-	const response = await deleteUserService(id);
+	const response = await userService.deleteUserService(id);
 
 	if (response instanceof ErrorHandler) return next(response);
 	return res.status(200).send({

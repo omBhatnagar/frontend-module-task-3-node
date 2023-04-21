@@ -1,9 +1,11 @@
 const Users = require("../models/User");
 
 const { ErrorHandler } = require("../util/error");
-const { hashPassword, checkPassword } = require("../util/encryptPassword");
+const passwordUtil = require("../util/encryptPassword");
 
 exports.createUserService = async (userData) => {
+	if (!userData) return new ErrorHandler(400, "Fields cannot be empty!");
+
 	const { name, email, password, confirmPassword } = userData;
 	if (!name || !email || !password || !confirmPassword)
 		return new ErrorHandler(400, "Fields cannot be empty!");
@@ -16,7 +18,7 @@ exports.createUserService = async (userData) => {
 		if (isUser)
 			return new ErrorHandler(400, "Account with given email already exists!");
 
-		const hashedPassword = hashPassword(password);
+		const hashedPassword = passwordUtil.hashPassword(password);
 
 		const user = new Users({
 			name,
@@ -25,25 +27,25 @@ exports.createUserService = async (userData) => {
 		});
 
 		var userToSave = await user.save();
+		return { status: true, body: userToSave };
 	} catch (error) {
 		console.log(error);
 		return new ErrorHandler(500, error.message);
 	}
-	return { status: true, body: userToSave };
 };
 
 exports.loginUserService = async (userData) => {
-	const { email, password } = userData;
+	if (!userData) return new ErrorHandler(400, "Fields cannot be empty!");
 
+	const { email, password } = userData;
 	if (!email || !password)
 		return new ErrorHandler(400, "Fields cannot be empty!");
 
 	try {
 		const user = await Users.findOne({ email }).exec();
-		if (!user) return new ErrorHandler(404, "User with given email not found!");
+		if (!user) return new ErrorHandler(400, "User with given email not found!");
 
-		const validated = checkPassword(password, user.password);
-		console.log({ validated });
+		const validated = passwordUtil.checkPassword(password, user.password);
 		if (!validated) return new ErrorHandler(400, "Incorrect email/password.");
 
 		return { status: true, body: user };
@@ -62,13 +64,15 @@ exports.getUsersService = async () => {
 };
 
 exports.updateUserService = async (userData) => {
+	if (!userData) return new ErrorHandler(400, "Fields cannot be empty!");
+
 	const { name, password, email } = userData;
 	try {
 		const user = await Users.findOne({ email }).exec();
 		if (!user) return new ErrorHandler(400, "Account does not exists!");
 
 		let hashedPassword;
-		if (password) hashedPassword = hashPassword(password);
+		if (password) hashedPassword = passwordUtil.hashPassword(password);
 
 		const updatedUser = await Users.findOneAndUpdate(
 			{ email },
@@ -87,7 +91,8 @@ exports.updateUserService = async (userData) => {
 
 exports.deleteUserService = async (id) => {
 	try {
-		const deletedUser = await Users.findByIdAndDelete(id);
+		const deletedUser = await Users.findOneAndRemove({ _id: id });
+
 		if (!deletedUser) return new ErrorHandler(400, "User does not exists!");
 
 		return { status: true, body: deletedUser };
