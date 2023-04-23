@@ -3,3 +3,5 @@ services:
     image: ombhatnagar/rest-with-mongo-task-3
     build:
       context: .
+    ports:
+      - "3000:3000"
