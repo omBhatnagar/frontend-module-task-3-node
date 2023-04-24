@@ -1,4 +1,3 @@
 {
-	"name": "DATABASE_URL",
-	"value": "mongodb+srv://omishb2001:Omi%40ch82%2311%40mongoDB@meanmerntask.22g6zba.mongodb.net/test"
+	"DATABASE_URL": "mongodb+srv://omishb2001:Omi%40ch82%2311%40mongoDB@meanmerntask.22g6zba.mongodb.net/test"
 }
