@@ -19,8 +19,10 @@ pipeline {
             }
         }
         stage('Clean-up'){
-            sh 'docker context use default'
-            sh 'docker context rm myecscontext1'
+            steps{
+                sh 'docker context use default'
+                sh 'docker context rm myecscontext1'
+            }
         }
     }
 }
