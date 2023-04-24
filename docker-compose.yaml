@@ -3,7 +3,6 @@ services:
     image: ombhatnagar/rest-with-mongo-task-3
     build:
       context: .
-    x-aws-pull_credentials: "arn:aws:secretsmanager:us-east-1:659355491053:secret:dbUrl-XtFWie"
     environment:
       - DATABASE_URL=${DATABASE_URL}
     ports:
