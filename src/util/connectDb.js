@@ -2,7 +2,9 @@ const mongoose = require("mongoose");
 
 const connectDb = () => {
 	const db_uri = process.env.DATABASE_URL;
-	mongoose.connect(db_uri);
+	mongoose.connect(
+		"mongodb+srv://omishb2001:Omi%40ch82%2311%40mongoDB@meanmerntask.22g6zba.mongodb.net/test",
+	);
 	const database = mongoose.connection;
 
 	database.on("error", (error) => console.log(error));
