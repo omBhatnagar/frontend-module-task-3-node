@@ -3,5 +3,7 @@ services:
     image: ombhatnagar/rest-with-mongo-task-3
     build:
       context: .
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
     ports:
       - "3000:3000"
